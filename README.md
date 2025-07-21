@@ -1,8 +1,8 @@
-# Cognizant Timesheet Validator
+#  Timesheet Validator
 
-A professional, enterprise-grade timesheet validation application built for Cognizant teams. This React-based web application allows users to upload CSV timesheet files and automatically validates the data for errors and inconsistencies.
+A professional, enterprise-grade timesheet validation application built for teams. This React-based web application allows users to upload CSV timesheet files and automatically validates the data for errors and inconsistencies.
 
-![Cognizant Timesheet Validator](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
+![ Timesheet Validator](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
 ![React](https://img.shields.io/badge/React-18.3.1-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.5.3-blue)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4.1-blue)
@@ -25,7 +25,7 @@ A professional, enterprise-grade timesheet validation application built for Cogn
 - **Reasonable Hours Check**: Flags entries with unusually long work hours (>16 hours)
 
 ### User Experience
-- **Professional Cognizant Branding**: Corporate-ready design with Cognizant styling
+- **Professional  Branding**: Corporate-ready design with  styling
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
 - **Smooth Animations**: Modern micro-interactions and transitions
 - **Intuitive Interface**: Clean, user-friendly design with clear visual feedback
@@ -53,7 +53,7 @@ Before running this application, ensure you have:
 ### 1. Clone the Repository
 ```bash
 git clone <repository-url>
-cd cognizant-timesheet-validator
+cd timesheet-validator
 ```
 
 ### 2. Install Dependencies
@@ -81,7 +81,7 @@ npm run preview
 ## 📁 Project Structure
 
 ```
-cognizant-timesheet-validator/
+timesheet-validator/
 ├── public/
 │   └── vite.svg
 ├── src/
@@ -143,7 +143,7 @@ EMP002,Sarah Johnson,2024-01-15,08:30,16:30,8,Project Beta,Database optimization
 ## 🎨 Design Features
 
 ### Visual Design
-- **Cognizant Branding**: Professional corporate styling with company colors
+- **Branding**: Professional corporate styling with company colors
 - **Gradient Backgrounds**: Modern gradient backgrounds and accents
 - **Responsive Layout**: Mobile-first design that works on all screen sizes
 - **Smooth Animations**: Fade-in, slide-up, and hover effects for enhanced UX
@@ -218,7 +218,7 @@ The application can be deployed to any static hosting service:
 
 ## 📝 License
 
-This project is proprietary software developed for Cognizant. All rights reserved.
+This project is proprietary software. All rights reserved.
 
 ## 🆘 Support
 
@@ -231,9 +231,9 @@ For technical support or questions:
 ## 🔄 Version History
 
 - **v1.0.0** - Initial release with core validation features
-- **v1.1.0** - Added Cognizant branding and enhanced UI
+- **v1.1.0** - Added branding and enhanced UI
 - **v1.2.0** - Improved validation rules and error messaging
 
 ---
 
-**Built with ❤️ for Cognizant Teams**
+**Built with ❤️ for Teams**

@@ -91,10 +91,10 @@ function App() {
           <>
             <div className="text-center mb-8 animate-fade-in">
               <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                Upload Your Cognizant Timesheet
+                Upload Your Timesheet
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed">
-                Upload a CSV file containing your Cognizant timesheet data. The system will automatically 
+                Upload a CSV file containing your timesheet data. The system will automatically 
                 validate the data and highlight any issues that need attention.
               </p>
             </div>
