@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
-import { Clock, AlertCircle, Building2 } from 'lucide-react';
+import { Clock, AlertCircle, Building2, BarChart3, Filter, Settings, FileText } from 'lucide-react';
 import { FileUpload } from './components/FileUpload';
 import { ValidationSummary } from './components/ValidationSummary';
 import { TimesheetTable } from './components/TimesheetTable';
+import { Analytics } from './components/Analytics';
+import { AdvancedFilters } from './components/AdvancedFilters';
+import { BulkOperations } from './components/BulkOperations';
 import { TimesheetEntry, ValidationResult } from './types/timesheet';
 import { parseCSV } from './utils/csvParser';
 import { validateTimesheet } from './utils/validator';
 
 function App() {
   const [entries, setEntries] = useState<TimesheetEntry[]>([]);
+  const [filteredEntries, setFilteredEntries] = useState<TimesheetEntry[]>([]);
   const [validation, setValidation] = useState<ValidationResult | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasProcessed, setHasProcessed] = useState(false);
+  const [activeTab, setActiveTab] = useState<'overview' | 'analytics' | 'filters' | 'bulk'>('overview');
 
   const handleFileSelect = async (file: File) => {
     setIsProcessing(true);
@@ -23,11 +28,14 @@ function App() {
       const validationResult = validateTimesheet(parsedEntries);
       
       setEntries(parsedEntries);
+      setFilteredEntries(parsedEntries);
       setValidation(validationResult);
       setHasProcessed(true);
+      setActiveTab('overview');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred while processing the file');
       setEntries([]);
+      setFilteredEntries([]);
       setValidation(null);
       setHasProcessed(false);
     } finally {
@@ -37,10 +45,41 @@ function App() {
 
   const resetApp = () => {
     setEntries([]);
+    setFilteredEntries([]);
     setValidation(null);
     setError(null);
     setHasProcessed(false);
+    setActiveTab('overview');
   };
+
+  const handleFilterChange = (filtered: TimesheetEntry[]) => {
+    setFilteredEntries(filtered);
+  };
+
+  const handleBulkStatusUpdate = (selectedIds: string[], newStatus: string) => {
+    // This is a demo - in a real app, you'd update the backend
+    const updatedEntries = entries.map((entry, index) => {
+      const entryId = `${entry.employeeId}-${index}`;
+      if (selectedIds.includes(entryId)) {
+        return { ...entry, timesheetStatus: newStatus };
+      }
+      return entry;
+    });
+    
+    setEntries(updatedEntries);
+    setFilteredEntries(updatedEntries);
+    
+    // Revalidate after status update
+    const newValidation = validateTimesheet(updatedEntries);
+    setValidation(newValidation);
+  };
+
+  const tabs = [
+    { id: 'overview' as const, label: 'Overview', icon: FileText, count: entries.length },
+    { id: 'analytics' as const, label: 'Analytics', icon: BarChart3, count: entries.length },
+    { id: 'filters' as const, label: 'Filters', icon: Filter, count: filteredEntries.length },
+    { id: 'bulk' as const, label: 'Bulk Operations', icon: Settings, count: entries.length }
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50 to-purple-100">
@@ -156,11 +195,45 @@ function App() {
 
         {entries.length > 0 && validation && (
           <div className="space-y-6">
-            <div className="flex justify-between items-center animate-fade-in">
-              <h2 className="text-2xl font-bold text-gray-900 flex items-center">
+            {/* Header with Tabs */}
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 animate-fade-in">
+              <div className="flex items-center">
                 <div className="w-1 h-8 bg-gradient-to-b from-cyan-500 to-purple-600 rounded-full mr-3"></div>
-                Validation Results
-              </h2>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Timesheet Dashboard
+                </h2>
+              </div>
+              
+              {/* Tab Navigation */}
+              <div className="flex items-center space-x-1 bg-white rounded-xl p-1 shadow-lg border border-slate-200/50">
+                {tabs.map((tab) => {
+                  const Icon = tab.icon;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium ${
+                        activeTab === tab.id
+                          ? 'bg-gradient-to-r from-cyan-500 to-purple-600 text-white shadow-md'
+                          : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
+                      }`}
+                    >
+                      <Icon className="h-4 w-4" />
+                      <span>{tab.label}</span>
+                      {tab.count > 0 && (
+                        <span className={`px-2 py-0.5 rounded-full text-xs ${
+                          activeTab === tab.id
+                            ? 'bg-white/20 text-white'
+                            : 'bg-slate-100 text-slate-600'
+                        }`}>
+                          {tab.count}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
               <button
                 onClick={resetApp}
                 className="px-6 py-3 text-slate-600 hover:text-slate-800 border border-slate-300 rounded-xl hover:bg-gradient-to-r hover:from-slate-50 hover:to-cyan-50 transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-md"
@@ -169,13 +242,53 @@ function App() {
               </button>
             </div>
 
-            <ValidationSummary validation={validation} />
-            
-            <TimesheetTable 
-              entries={entries} 
-              errors={validation.errors}
-              warnings={validation.warnings}
-            />
+            {/* Tab Content */}
+            {activeTab === 'overview' && (
+              <div className="space-y-6">
+                <ValidationSummary validation={validation} />
+                <TimesheetTable 
+                  entries={filteredEntries} 
+                  errors={validation.errors}
+                  warnings={validation.warnings}
+                />
+              </div>
+            )}
+
+            {activeTab === 'analytics' && (
+              <Analytics entries={entries} />
+            )}
+
+            {activeTab === 'filters' && (
+              <div className="space-y-6">
+                <AdvancedFilters 
+                  entries={entries} 
+                  onFilterChange={handleFilterChange}
+                />
+                {filteredEntries.length > 0 && (
+                  <TimesheetTable 
+                    entries={filteredEntries} 
+                    errors={validation.errors}
+                    warnings={validation.warnings}
+                  />
+                )}
+              </div>
+            )}
+
+            {activeTab === 'bulk' && (
+              <div className="space-y-6">
+                <BulkOperations 
+                  entries={entries}
+                  errors={validation.errors}
+                  warnings={validation.warnings}
+                  onStatusUpdate={handleBulkStatusUpdate}
+                />
+                <TimesheetTable 
+                  entries={entries} 
+                  errors={validation.errors}
+                  warnings={validation.warnings}
+                />
+              </div>
+            )}
           </div>
         )}
       </div>
