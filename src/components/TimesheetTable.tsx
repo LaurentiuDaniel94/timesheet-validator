@@ -9,7 +9,7 @@ interface TimesheetTableProps {
 }
 
 export const TimesheetTable: React.FC<TimesheetTableProps> = ({ entries, errors, warnings }) => {
-  const [sortField, setSortField] = useState<keyof TimesheetEntry>('date');
+  const [sortField, setSortField] = useState<keyof TimesheetEntry>('startDate');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   const handleSort = (field: keyof TimesheetEntry) => {
@@ -39,18 +39,24 @@ export const TimesheetTable: React.FC<TimesheetTableProps> = ({ entries, errors,
   };
 
   const exportToCSV = () => {
-    const headers = ['Employee ID', 'Employee Name', 'Date', 'Start Time', 'End Time', 'Hours Worked', 'Project', 'Description'];
+    const headers = [
+      'Employee ID', 'Start Date', 'End Date', 'Timesheet Status', 'Schedule Hours', 
+      'Reported Hours', 'Regular Hours', 'Overtime Hours', 'Holiday Hours', 'Leave Hours', 'Total Hours'
+    ];
     const csvContent = [
       headers.join(','),
       ...sortedEntries.map(entry => [
         entry.employeeId,
-        `"${entry.employeeName}"`,
-        entry.date,
-        entry.startTime,
-        entry.endTime,
-        entry.hoursWorked,
-        entry.project,
-        `"${entry.description}"`
+        entry.startDate,
+        entry.endDate,
+        `"${entry.timesheetStatus}"`,
+        entry.scheduleHours,
+        entry.reportedHours,
+        entry.regularHours,
+        entry.overtimeHours,
+        entry.holidayHours,
+        entry.leaveHours,
+        entry.totalHours
       ].join(','))
     ].join('\n');
 
@@ -68,6 +74,25 @@ export const TimesheetTable: React.FC<TimesheetTableProps> = ({ entries, errors,
     return sortDirection === 'asc' ? 
       <ChevronUp className="w-4 h-4 ml-1" /> : 
       <ChevronDown className="w-4 h-4 ml-1" />;
+  };
+
+  const getStatusBadgeColor = (status: string) => {
+    switch (status) {
+      case 'Approved':
+        return 'bg-emerald-100 text-emerald-800 border-emerald-200';
+      case 'Partially Approved':
+        return 'bg-teal-100 text-teal-800 border-teal-200';
+      case 'Needs Approval':
+        return 'bg-amber-100 text-amber-800 border-amber-200';
+      case 'Partially Submitted':
+        return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'Not Submitted':
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'Absence/Holiday':
+        return 'bg-purple-100 text-purple-800 border-purple-200';
+      default:
+        return 'bg-slate-100 text-slate-800 border-slate-200';
+    }
   };
 
   if (entries.length === 0) {
@@ -95,17 +120,20 @@ export const TimesheetTable: React.FC<TimesheetTableProps> = ({ entries, errors,
             <tr>
               {[
                 { key: 'employeeId' as keyof TimesheetEntry, label: 'Employee ID' },
-                { key: 'employeeName' as keyof TimesheetEntry, label: 'Employee Name' },
-                { key: 'date' as keyof TimesheetEntry, label: 'Date' },
-                { key: 'startTime' as keyof TimesheetEntry, label: 'Start Time' },
-                { key: 'endTime' as keyof TimesheetEntry, label: 'End Time' },
-                { key: 'hoursWorked' as keyof TimesheetEntry, label: 'Hours Worked' },
-                { key: 'project' as keyof TimesheetEntry, label: 'Project' },
-                { key: 'description' as keyof TimesheetEntry, label: 'Description' }
+                { key: 'startDate' as keyof TimesheetEntry, label: 'Start Date' },
+                { key: 'endDate' as keyof TimesheetEntry, label: 'End Date' },
+                { key: 'timesheetStatus' as keyof TimesheetEntry, label: 'Status' },
+                { key: 'scheduleHours' as keyof TimesheetEntry, label: 'Schedule Hours' },
+                { key: 'reportedHours' as keyof TimesheetEntry, label: 'Reported Hours' },
+                { key: 'regularHours' as keyof TimesheetEntry, label: 'Regular Hours' },
+                { key: 'overtimeHours' as keyof TimesheetEntry, label: 'Overtime Hours' },
+                { key: 'holidayHours' as keyof TimesheetEntry, label: 'Holiday Hours' },
+                { key: 'leaveHours' as keyof TimesheetEntry, label: 'Leave Hours' },
+                { key: 'totalHours' as keyof TimesheetEntry, label: 'Total Hours' }
               ].map(({ key, label }) => (
                 <th
                   key={key}
-                  className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors duration-200"
+                  className="px-4 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors duration-200"
                   onClick={() => handleSort(key)}
                 >
                   <div className="flex items-center">
@@ -129,29 +157,40 @@ export const TimesheetTable: React.FC<TimesheetTableProps> = ({ entries, errors,
                     hasIssues ? 'bg-gradient-to-r from-rose-50 to-amber-50' : ''
                   }`}
                 >
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-slate-900">
                     {entry.employeeId}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-700">
-                    {entry.employeeName}
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-slate-700">
+                    {entry.startDate}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-700">
-                    {entry.date}
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-slate-700">
+                    {entry.endDate}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-700">
-                    {entry.startTime}
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusBadgeColor(entry.timesheetStatus)}`}>
+                      {entry.timesheetStatus}
+                    </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-700">
-                    {entry.endTime}
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-slate-700 font-medium">
+                    {entry.scheduleHours.toFixed(2)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-700">
-                    {entry.hoursWorked}
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-slate-700 font-medium">
+                    {entry.reportedHours.toFixed(2)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-700">
-                    {entry.project}
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-slate-700">
+                    {entry.regularHours.toFixed(2)}
                   </td>
-                  <td className="px-6 py-4 text-sm text-slate-700 max-w-xs truncate">
-                    {entry.description}
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-slate-700">
+                    {entry.overtimeHours.toFixed(2)}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-slate-700">
+                    {entry.holidayHours.toFixed(2)}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-slate-700">
+                    {entry.leaveHours.toFixed(2)}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-slate-700 font-bold">
+                    {entry.totalHours.toFixed(2)}
                   </td>
                 </tr>
               );

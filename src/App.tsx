@@ -94,8 +94,8 @@ function App() {
                 Upload Your Timesheet
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed">
-                Upload a CSV file containing your timesheet data. The system will automatically 
-                validate the data and highlight any issues that need attention.
+                Upload a CSV file containing your period-based timesheet data. The system will automatically 
+                validate hours calculations, status consistency, and data integrity.
               </p>
             </div>
 
@@ -114,33 +114,40 @@ function App() {
                 <table className="min-w-full text-sm rounded-lg overflow-hidden">
                   <thead className="bg-gradient-to-r from-slate-50 to-cyan-50">
                     <tr>
-                      <th className="px-4 py-3 text-left font-semibold text-slate-700">Employee ID</th>
-                      <th className="px-4 py-3 text-left font-semibold text-slate-700">Employee Name</th>
-                      <th className="px-4 py-3 text-left font-semibold text-slate-700">Date</th>
-                      <th className="px-4 py-3 text-left font-semibold text-slate-700">Start Time</th>
-                      <th className="px-4 py-3 text-left font-semibold text-slate-700">End Time</th>
-                      <th className="px-4 py-3 text-left font-semibold text-slate-700">Hours Worked</th>
-                      <th className="px-4 py-3 text-left font-semibold text-slate-700">Project</th>
-                      <th className="px-4 py-3 text-left font-semibold text-slate-700">Description</th>
+                      <th className="px-3 py-3 text-left font-semibold text-slate-700">Empl ID</th>
+                      <th className="px-3 py-3 text-left font-semibold text-slate-700">Start Date</th>
+                      <th className="px-3 py-3 text-left font-semibold text-slate-700">End Date</th>
+                      <th className="px-3 py-3 text-left font-semibold text-slate-700">Timesheet Status</th>
+                      <th className="px-3 py-3 text-left font-semibold text-slate-700">Schedule Hours</th>
+                      <th className="px-3 py-3 text-left font-semibold text-slate-700">Reported Hours</th>
+                      <th className="px-3 py-3 text-left font-semibold text-slate-700">Regular Hours</th>
+                      <th className="px-3 py-3 text-left font-semibold text-slate-700">Overtime Hours</th>
+                      <th className="px-3 py-3 text-left font-semibold text-slate-700">Holiday Hours</th>
+                      <th className="px-3 py-3 text-left font-semibold text-slate-700">Leave Hours</th>
+                      <th className="px-3 py-3 text-left font-semibold text-slate-700">Total Hours</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white">
                     <tr className="hover:bg-cyan-50 transition-colors duration-200">
-                      <td className="px-4 py-3 text-slate-700 font-medium">EMP001</td>
-                      <td className="px-4 py-3 text-slate-700">John Doe</td>
-                      <td className="px-4 py-3 text-slate-700">2024-01-15</td>
-                      <td className="px-4 py-3 text-slate-700">09:00</td>
-                      <td className="px-4 py-3 text-slate-700">17:00</td>
-                      <td className="px-4 py-3 text-cyan-600 font-semibold">8</td>
-                      <td className="px-4 py-3 text-slate-700">Project Alpha</td>
-                      <td className="px-4 py-3 text-slate-700">Development work</td>
+                      <td className="px-3 py-3 text-slate-700 font-medium">1</td>
+                      <td className="px-3 py-3 text-slate-700">05/26/2025</td>
+                      <td className="px-3 py-3 text-slate-700">1/6/2025</td>
+                      <td className="px-3 py-3 text-slate-700">Approved</td>
+                      <td className="px-3 py-3 text-cyan-600 font-semibold">40.00</td>
+                      <td className="px-3 py-3 text-cyan-600 font-semibold">40.00</td>
+                      <td className="px-3 py-3 text-slate-700">40.00</td>
+                      <td className="px-3 py-3 text-slate-700">0.00</td>
+                      <td className="px-3 py-3 text-slate-700">0.00</td>
+                      <td className="px-3 py-3 text-slate-700">0.00</td>
+                      <td className="px-3 py-3 text-slate-700 font-bold">40.00</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
               <div className="mt-6 p-4 bg-cyan-50 rounded-lg border-l-4 border-cyan-400">
                 <p className="text-sm text-cyan-800">
-                  <strong>💡 Pro Tip:</strong> The header names are flexible - the system can recognize common variations like "employee_id", "start_time", "hours", etc.
+                  <strong>💡 Pro Tip:</strong> The system validates that Total Hours = Regular + Overtime + Holiday + Leave, 
+                  and checks that Reported Hours don't exceed Schedule Hours. Status-specific validations are also applied.
                 </p>
               </div>
             </div>

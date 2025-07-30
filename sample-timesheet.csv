@@ -1,11 +1,9 @@
-Employee ID,Employee Name,Date,Start Time,End Time,Hours Worked,Project,Description
-EMP001,John Smith,2024-01-15,09:00,17:00,8,Project Alpha,Frontend development work
-EMP002,Sarah Johnson,2024-01-15,08:30,16:30,8,Project Beta,Database optimization
-EMP003,Michael Brown,2024-01-15,09:15,17:15,8,Project Alpha,UI/UX design tasks
-EMP004,Emily Davis,2024-01-15,08:00,16:00,8,Project Gamma,Quality assurance testing
-EMP005,David Wilson,2024-01-15,09:30,17:30,8,Project Beta,Backend API development
-EMP006,Lisa Anderson,2024-01-15,08:45,16:45,8,Project Alpha,Code review and documentation
-EMP007,Robert Taylor,2024-01-15,09:00,17:00,8,Project Gamma,System integration testing
-EMP008,Jennifer Martinez,2024-01-15,08:15,16:15,8,Project Beta,Data migration scripts
-EMP009,Christopher Lee,2024-01-15,09:00,18:00,9,Project Alpha,Emergency bug fixes
-EMP010,Amanda White,2024-01-15,08:30,12:30,4,Project Gamma,Part-time consulting work
+Empl ID,Start Date,End Date,Timesheet Status,Schedule Hours,Reported Hours,Regular Hours,Overtime Hours,Holiday Hours,Leave Hours,Total Hours
+1,01/01/2024,01/07/2024,Approved,40.00,40.00,40.00,0.00,0.00,0.00,40.00
+2,01/01/2024,01/07/2024,Approved,40.00,40.00,32.00,8.00,0.00,0.00,40.00
+3,01/08/2024,01/14/2024,Partially Submitted,40.00,35.00,35.00,0.00,0.00,0.00,35.00
+4,01/08/2024,01/14/2024,Needs Approval,40.00,40.00,40.00,0.00,0.00,0.00,40.00
+5,01/15/2024,01/21/2024,Not Submitted,40.00,0.00,0.00,0.00,0.00,0.00,0.00
+6,01/15/2024,01/21/2024,Absence/Holiday,40.00,0.00,0.00,0.00,40.00,0.00,40.00
+7,01/22/2024,01/28/2024,Approved,40.00,32.00,24.00,0.00,0.00,8.00,32.00
+8,01/22/2024,01/28/2024,Partially Approved,40.00,44.00,40.00,4.00,0.00,0.00,44.00
